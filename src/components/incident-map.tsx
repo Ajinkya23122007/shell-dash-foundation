@@ -1,6 +1,19 @@
-import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
+import { useEffect } from "react";
+import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { mockIncidents, type Incident, type Severity } from "@/data/incidents";
+
+function FlyToSelected({ incident }: { incident?: Incident | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (incident) {
+      map.flyTo([incident.lat, incident.lng], Math.max(map.getZoom(), 15), {
+        duration: 0.8,
+      });
+    }
+  }, [incident, map]);
+  return null;
+}
 
 const severityColors: Record<Severity, string> = {
   CRITICAL: "#ff3b30",
