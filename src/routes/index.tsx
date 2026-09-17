@@ -31,7 +31,10 @@ const statConfig = [
   { key: "availableShelters", label: "Available Shelters", tag: "OPEN", color: "ok", blinking: false },
 ] as const;
 
-const colorClasses: Record<string, { text: string; bg: string }> = {
+const colorClasses: Record<
+  (typeof statConfig)[number]["color"],
+  { text: string; bg: string }
+> = {
   crit: { text: "text-crit", bg: "bg-crit" },
   alert: { text: "text-alert", bg: "bg-alert" },
   ops: { text: "text-ops", bg: "bg-ops" },
