@@ -48,6 +48,7 @@ const colorClasses: Record<
 function DashboardPage() {
   const stats = computeDashboardStats(mockIncidents);
   const [mounted, setMounted] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   useEffect(() => setMounted(true), []);
 
   return (
