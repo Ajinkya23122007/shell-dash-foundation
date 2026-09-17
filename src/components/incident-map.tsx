@@ -65,16 +65,23 @@ export default function IncidentMap({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <FlyToSelected incident={selected} />
       {incidents.map((incident) => (
         <CircleMarker
           key={incident.id}
           center={[incident.lat, incident.lng]}
-          radius={incident.severity === "CRITICAL" ? 12 : 9}
+          radius={
+            (incident.severity === "CRITICAL" ? 12 : 9) +
+            (incident.id === selectedId ? 5 : 0)
+          }
           pathOptions={{
-            color: severityColors[incident.severity],
+            color:
+              incident.id === selectedId
+                ? "#ffffff"
+                : severityColors[incident.severity],
             fillColor: severityColors[incident.severity],
-            fillOpacity: 0.55,
-            weight: 2,
+            fillOpacity: incident.id === selectedId ? 0.8 : 0.55,
+            weight: incident.id === selectedId ? 3 : 2,
           }}
           eventHandlers={{
             click: () => onSelect?.(incident),
