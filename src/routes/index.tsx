@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { computeDashboardStats, mockIncidents } from "@/data/incidents";
 import { cn } from "@/lib/utils";
+
+const IncidentMap = lazy(() => import("@/components/incident-map"));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,6 +46,8 @@ const colorClasses: Record<
 
 function DashboardPage() {
   const stats = computeDashboardStats(mockIncidents);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <main className="flex min-w-0 flex-1 flex-col">
@@ -98,18 +103,45 @@ function DashboardPage() {
         </div>
 
         <div className="rounded-[22px] border border-edge bg-panel p-5">
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <span className="font-mono text-[11px] font-bold tracking-[0.12em] text-dim">
               LIVE OPERATIONS MAP
             </span>
-            <span className="font-mono text-[10px] text-dim/70">
-              MAP MODULE PENDING INTEGRATION
-            </span>
+            <div className="flex items-center gap-3">
+              {(
+                [
+                  ["CRITICAL", "bg-crit"],
+                  ["HIGH", "bg-alert"],
+                  ["MEDIUM", "bg-warn"],
+                  ["LOW", "bg-ok"],
+                ] as const
+              ).map(([label, dot]) => (
+                <span
+                  key={label}
+                  className="flex items-center gap-1.5 font-mono text-[10px] text-dim"
+                >
+                  <span className={cn("size-2 rounded-full", dot)} />
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="grid aspect-[21/8] w-full place-items-center rounded-2xl border border-edge bg-background">
-            <span className="px-4 text-center font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-dim/50">
-              Live map with incident markers arrives in the next build step
-            </span>
+          <div className="h-[420px] w-full overflow-hidden rounded-2xl border border-edge bg-background md:h-[480px]">
+            {mounted ? (
+              <Suspense
+                fallback={
+                  <div className="grid h-full place-items-center font-mono text-[10px] uppercase tracking-[0.15em] text-dim/50">
+                    Loading map…
+                  </div>
+                }
+              >
+                <IncidentMap incidents={mockIncidents} />
+              </Suspense>
+            ) : (
+              <div className="grid h-full place-items-center font-mono text-[10px] uppercase tracking-[0.15em] text-dim/50">
+                Initializing map…
+              </div>
+            )}
           </div>
         </div>
       </div>
