@@ -43,12 +43,15 @@ function formatTime(iso: string) {
 
 export default function IncidentMap({
   incidents = mockIncidents,
+  selectedId,
   onSelect,
 }: {
   incidents?: Incident[];
+  selectedId?: string | null;
   onSelect?: (incident: Incident) => void;
 }) {
   const center: [number, number] = [19.08, 72.88];
+  const selected = incidents.find((i) => i.id === selectedId) ?? null;
 
   return (
     <MapContainer
