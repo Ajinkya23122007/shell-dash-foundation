@@ -46,6 +46,8 @@ const colorClasses: Record<
 
 function DashboardPage() {
   const stats = computeDashboardStats(mockIncidents);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <main className="flex min-w-0 flex-1 flex-col">
