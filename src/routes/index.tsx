@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { computeDashboardStats, mockIncidents } from "@/data/incidents";
 import { cn } from "@/lib/utils";
+
+const IncidentMap = lazy(() => import("@/components/incident-map"));
 
 export const Route = createFileRoute("/")({
   head: () => ({
