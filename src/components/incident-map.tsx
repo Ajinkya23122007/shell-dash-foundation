@@ -1,6 +1,19 @@
-import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
+import { useEffect } from "react";
+import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { mockIncidents, type Incident, type Severity } from "@/data/incidents";
+
+function FlyToSelected({ incident }: { incident?: Incident | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (incident) {
+      map.flyTo([incident.lat, incident.lng], Math.max(map.getZoom(), 15), {
+        duration: 0.8,
+      });
+    }
+  }, [incident, map]);
+  return null;
+}
 
 const severityColors: Record<Severity, string> = {
   CRITICAL: "#ff3b30",
@@ -30,12 +43,15 @@ function formatTime(iso: string) {
 
 export default function IncidentMap({
   incidents = mockIncidents,
+  selectedId,
   onSelect,
 }: {
   incidents?: Incident[];
+  selectedId?: string | null;
   onSelect?: (incident: Incident) => void;
 }) {
   const center: [number, number] = [19.08, 72.88];
+  const selected = incidents.find((i) => i.id === selectedId) ?? null;
 
   return (
     <MapContainer
@@ -49,16 +65,23 @@ export default function IncidentMap({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <FlyToSelected incident={selected} />
       {incidents.map((incident) => (
         <CircleMarker
           key={incident.id}
           center={[incident.lat, incident.lng]}
-          radius={incident.severity === "CRITICAL" ? 12 : 9}
+          radius={
+            (incident.severity === "CRITICAL" ? 12 : 9) +
+            (incident.id === selectedId ? 5 : 0)
+          }
           pathOptions={{
-            color: severityColors[incident.severity],
+            color:
+              incident.id === selectedId
+                ? "#ffffff"
+                : severityColors[incident.severity],
             fillColor: severityColors[incident.severity],
-            fillOpacity: 0.55,
-            weight: 2,
+            fillOpacity: incident.id === selectedId ? 0.8 : 0.55,
+            weight: incident.id === selectedId ? 3 : 2,
           }}
           eventHandlers={{
             click: () => onSelect?.(incident),
