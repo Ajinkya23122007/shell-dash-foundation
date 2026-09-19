@@ -2,13 +2,8 @@
 
 Build only Step 1 of the build order: app shell, routing, sidebar/nav, and the dashboard with mock stat cards. Don't build the map or other pages yet."
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/0a8dddba-99d1-4e28-86c2-52350cc9ae2d).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
+## Build 
+- **Ship faster**: describe what you want to build and handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
 - **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
