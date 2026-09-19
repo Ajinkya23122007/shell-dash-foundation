@@ -4,7 +4,7 @@ Build only Step 1 of the build order: app shell, routing, sidebar/nav, and the d
 
 ## Build 
 - **Ship faster**: describe what you want to build and handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Stay in sync**: every change made is committed straight to this repository.
 - **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
